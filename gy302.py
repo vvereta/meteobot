@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import smbus
 import time
+import smbus
 
 class Gy302():
     'BH1715 (gy-302) sensor'
@@ -12,18 +12,20 @@ class Gy302():
     bus = smbus.SMBus(bus_n)
 
     def write(self):
-        Gy302.bus.write_byte(Gy302.addr, Gy302.command_on)
-        Gy302.bus.write_byte(Gy302.addr, Gy302.command_read)
+        "Sending command to sensor"
+        self.bus.write_byte(Gy302.addr, Gy302.command_on)
+        self.bus.write_byte(Gy302.addr, Gy302.command_read)
         time.sleep(0.2)
 
     def read(self):
-        data = Gy302.bus.read_i2c_block_data(Gy302.addr, 2)
+        "Reading data from sensor"
+        data = self.bus.read_i2c_block_data(Gy302.addr, 2)
         result = (data[0] * 256 + data[1])
         return result
 
     def get_luminance(self):
+        "Getting luminance from sensor"
         self.write()
         data = self.read()
         luminance = data / 1.2
         return luminance
-

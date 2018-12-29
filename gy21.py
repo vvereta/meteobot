@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
-import smbus
 import time
+import smbus
 
 class Gy21():
     'SI7021 (gy-21) sensor'
@@ -12,23 +12,27 @@ class Gy21():
     bus = smbus.SMBus(bus_n)
 
     def read(self):
-        data1 = Gy21.bus.read_byte(Gy21.addr)
-        data2 = Gy21.bus.read_byte(Gy21.addr)
+        "Reading data from sensor"
+        data1 = self.bus.read_byte(Gy21.addr)
+        data2 = self.bus.read_byte(Gy21.addr)
         result = data1 * 256 + data2
         return result
 
     def write(self, command):
-        Gy21.bus.write_byte(Gy21.addr, command)
+        "Sending command to sensor"
+        self.bus.write_byte(Gy21.addr, command)
         time.sleep(0.2)
 
     def get_temperature(self):
+        "Getting temperature from sensor"
         self.write(Gy21.command_t)
         data = self.read()
-        celsTemp = (data * 175.72 / 65536.0) - 46.85
+        cels_temp = (data * 175.72 / 65536.0) - 46.85
 
-        return celsTemp
+        return cels_temp
 
     def get_humidity(self):
+        "Getting humidity from sensor"
         self.write(Gy21.command_h)
         data = self.read()
         humidity = (data * 125 / 65536.0) - 6
@@ -36,6 +40,7 @@ class Gy21():
         return humidity
 
     def get_tmpr_and_hmdt(self):
+        "Getting temperature and humidity from sensor"
         data = [0, 0]
         data[0] = self.get_temperature()
         data[1] = self.get_humidity()

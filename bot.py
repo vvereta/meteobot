@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 
+import os
 import telebot
-import os, sys
-import gy21, gy68, gy302
+
+import gy21
+import gy68
+import gy302
 
 if "API_TOKEN" not in os.environ:
     raise AssertionError("Please configure API_TOKEN as environment variables")
@@ -16,13 +19,14 @@ gy68_sensor = gy68.Gy68()
 gy302_sensor = gy302.Gy302()
 
 
-# Handle '/start' and '/help'
 @bot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
+    "Handle '/start' and '/help'"
     bot.reply_to(message, "Hi, I'm Vetall's bot")
 
 
 def process_message(message):
+    "Processing text messages"
     gy21_data = gy21_sensor.get_tmpr_and_hmdt()
     gy68_data = gy68_sensor.get_temperature()
     gy302_data = gy302_sensor.get_luminance()
@@ -32,12 +36,15 @@ def process_message(message):
     bot.send_message(message.chat.id, msg)
 
 def print_message(message, text):
-        bot.send_message(message.chat.id, text)
+    "Printeng text messages"
+    bot.send_message(message.chat.id, text)
 
 
-# Handle all other messages with content_type 'text' (content_types defaults to ['text'])
+
 @bot.message_handler(func=lambda message: True)
 def echo_message(message):
+    '''Handle all other messages with content_type 'text' \
+    (content_types defaults to ['text'])'''
     if message.chat.id in USER:
         process_message(message)
     else:

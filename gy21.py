@@ -12,9 +12,10 @@ class Gy21():
     bus = smbus.SMBus(bus_n)
 
     def read(self):
-        data = Gy21.bus.read_byte(Gy21.addr)
-        data = data * 256 + data
-        return data
+        data1 = Gy21.bus.read_byte(Gy21.addr)
+        data2 = Gy21.bus.read_byte(Gy21.addr)
+        result = data1 * 256 + data2
+        return result
 
     def write(self, command):
         Gy21.bus.write_byte(Gy21.addr, command)

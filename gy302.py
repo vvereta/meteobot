@@ -18,7 +18,6 @@ class Gy302():
 
     def read(self):
         data = Gy302.bus.read_i2c_block_data(Gy302.addr, 2)
-        data2 = Gy302.bus.read_byte(Gy302.addr)
         result = (data[0] * 256 + data[1])
         return result
 

@@ -30,8 +30,8 @@ def process_message(message):
     gy21_data = gy21_sensor.get_tmpr_and_hmdt()
     gy68_data = gy68_sensor.get_temperature()
     gy302_data = gy302_sensor.get_luminance()
-    msg = "t1 = {0:.1f}{1}C\nh = {2:.1f}%\nt2 = {3:.1f}{1}C\nl = {4:.0f}lx"\
-    .format(gy21_data[0], '\u00b0', gy21_data[1], gy68_data, gy302_data)
+    msg = "t1 = {0:.1f}{1}C\nt2 = {2:.1f}{1}C\nh  = {3:.1f}%\nl   = {4:.0f}lx"\
+    .format(gy21_data[0], '\u00b0', gy68_data, gy21_data[1], gy302_data)
 
     bot.send_message(message.chat.id, msg)
 

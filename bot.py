@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 
 import os
+import time
+import picamera
 import telebot
 
 import gy21
@@ -17,6 +19,10 @@ bot = telebot.TeleBot(API_TOKEN)
 gy21_sensor = gy21.Gy21()
 gy68_sensor = gy68.Gy68()
 gy302_sensor = gy302.Gy302()
+
+
+camera = picamera.PiCamera()
+camera.resolution = (1024, 768)
 
 
 @bot.message_handler(commands=['help', 'start'])
@@ -39,6 +45,23 @@ def print_message(message, text):
     "Printeng text messages"
     bot.send_message(message.chat.id, text)
 
+
+def process_photo(message):
+    "Make and send photo"
+    camera.start_preview()
+    time.sleep(2)
+    camera.capture('/home/pi/Documents/photo.jpg')
+    camera.stop_preview()
+    bot.send_photo(message.chat.id, open('/home/pi/Documents/photo.jpg', 'rb'))
+
+
+@bot.message_handler(commands=['photo'])
+def make_photo(message):
+    "Handle '/photo' command"
+    if message.chat.id in USER:
+        process_photo(message)
+    else:
+        print_message(message, "access denied")
 
 
 @bot.message_handler(func=lambda message: True)

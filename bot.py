@@ -21,10 +21,6 @@ gy68_sensor = gy68.Gy68()
 gy302_sensor = gy302.Gy302()
 
 
-camera = picamera.PiCamera()
-camera.resolution = (1024, 768)
-
-
 @bot.message_handler(commands=['help', 'start'])
 def send_welcome(message):
     "Handle '/start' and '/help'"
@@ -48,10 +44,11 @@ def print_message(message, text):
 
 def process_photo(message):
     "Make and send photo"
-    camera.start_preview()
-    time.sleep(2)
-    camera.capture('/home/pi/Documents/photo.jpg')
-    camera.stop_preview()
+    with picamera.PiCamera(resolution = (1024, 768)) as camera:
+        camera.start_preview()
+        time.sleep(2)
+        camera.capture('/home/pi/Documents/photo.jpg')
+        camera.stop_preview()
     bot.send_photo(message.chat.id, open('/home/pi/Documents/photo.jpg', 'rb'))
 
 

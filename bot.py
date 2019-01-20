@@ -45,6 +45,7 @@ def print_message(message, text):
 def process_photo(message):
     "Make and send photo"
     with picamera.PiCamera(resolution = (1024, 768)) as camera:
+        camera.rotation = 180
         camera.start_preview()
         time.sleep(2)
         camera.capture('/home/pi/Documents/photo.jpg')
